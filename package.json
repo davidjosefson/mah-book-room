@@ -1,0 +1,15 @@
+{
+  "name": "mah-book-room",
+  "version": "1.0.0",
+  "description": "Book rooms via schema.mah.se",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Josefson",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.8.1",
+    "request": "^2.61.0"
+  }
+}
