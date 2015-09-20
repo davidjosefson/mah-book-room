@@ -1,15 +1,15 @@
 /*
 TODO: fixa så att room och time går att hämta i nån sorts map, så att de kan printas snyggt och enkelt, eller bara nån getTime getRoom
-TODO: refactora till tre filer: index, validators, constants
+TODO: DONE! refactora till tre filer: index, validators, constants
 TODO: README
 TODO: testning
+TODO: ändra namn från commander till args
 */
 
 var request = require('request');
-var fs = require('fs');
-var http = require('http');
 var commander = require('commander');
 var constants = require('./constants');
+var validators = require('./validators');
 
 // Saves cookies for each request and uses them for the next
 var request = request.defaults({
@@ -27,7 +27,7 @@ commander
 commander.on('--help', function() {
   console.log('  Examples:');
   console.log('');
-  console.log('    $ book -u ab1234 -p myPassword -r NI:C0405 -d 2015-09-19 -t 13');
+  console.log('    $ book -u ab1234 -p myPassword -r NI:C0405 -d 15-09-19 -t 13');
   console.log('');
   console.log('    .. will book room NI:C0405 on September the 19th between 13.15-15.00');
   console.log('');
