@@ -1,9 +1,5 @@
 #! /usr/bin/env node
 
-/*
-TODO: README
-*/
-
 var request = require('request');
 var args = require('commander');
 var constants = require('./constants');
@@ -26,7 +22,7 @@ args
 args.on('--help', function() {
   console.log('  Examples:');
   console.log('');
-  console.log('    $ book -u ab1234 -p myPassword -r NI:C0405 -d 15-09-19 -t 13');
+  console.log('    $ mah-book-room -u ab1234 -p myPassword -r NI:C0405 -d 15-09-19 -t 13');
   // console.log('');
   console.log('    .. will book room NI:C0405 on September the 19th between 13.15-15.00');
   console.log('');
