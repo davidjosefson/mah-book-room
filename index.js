@@ -49,20 +49,9 @@ if (!validators.user(args.user) ||
 }
 
 // Books a room
-book(createBookingUrl(), args.pass, args.user);
+bookRoom(createBookingUrl(), args.pass, args.user);
 
-function createBookingUrl() {
-  var bookingUrl = 'https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&typ=RESURSER_LOKALER&flik=FLIK-0017&moment= ';
-  bookingUrl += '&datum=' + args.date;
-  bookingUrl += '&id=' + constants.ROOMS[args.room].urlRoom;
-  bookingUrl += '&intervall=' + constants.TIMES[args.time].urlTime;
-
-  console.log(bookingUrl);
-
-  return bookingUrl;
-}
-
-function book(bookingUrl, password, username) {
+function bookRoom(bookingUrl, password, username) {
   request('https://schema.mah.se/resursbokning.jsp?flik=FLIK-0017', function(err, httpResponse1, body) {
     request({
       method: 'POST',
@@ -92,4 +81,15 @@ function book(bookingUrl, password, username) {
       }
     });
   });
+}
+
+function createBookingUrl() {
+  var bookingUrl = 'https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&typ=RESURSER_LOKALER&flik=FLIK-0017&moment= ';
+  bookingUrl += '&datum=' + args.date;
+  bookingUrl += '&id=' + constants.ROOMS[args.room].urlRoom;
+  bookingUrl += '&intervall=' + constants.TIMES[args.time].urlTime;
+
+  console.log(bookingUrl);
+
+  return bookingUrl;
 }
