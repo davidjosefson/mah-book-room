@@ -1,6 +1,8 @@
 /*
 TODO: fixa så att room och time går att hämta i nån sorts map, så att de kan printas snyggt och enkelt, eller bara nån getTime getRoom
-
+TODO: refactora till tre filer: index, validators, constants
+TODO: README
+TODO: testning
 */
 
 
