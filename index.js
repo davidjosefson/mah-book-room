@@ -89,7 +89,5 @@ function createBookingUrl() {
   bookingUrl += '&id=' + constants.ROOMS[args.room].urlRoom;
   bookingUrl += '&intervall=' + constants.TIMES[args.time].urlTime;
 
-  console.log(bookingUrl);
-
   return bookingUrl;
 }
