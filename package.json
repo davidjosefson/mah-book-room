@@ -1,6 +1,6 @@
 {
   "name": "mah-book-room",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Book rooms via schema.mah.se",
   "main": "index.js",
   "scripts": {
