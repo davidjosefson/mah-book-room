@@ -1,13 +1,9 @@
 /*
-TODO: fixa så att room och time går att hämta i nån sorts map, så att de kan printas snyggt och enkelt, eller bara nån getTime getRoom
-TODO: DONE! refactora till tre filer: index, validators, constants
 TODO: README
-TODO: testning
-TODO: ändra namn från commander till args
 */
 
 var request = require('request');
-var commander = require('commander');
+var args = require('commander');
 var constants = require('./constants');
 var validators = require('./validators');
 
@@ -16,7 +12,8 @@ var request = request.defaults({
   jar: true
 });
 
-commander
+// Command line arguments
+args
   .version('0.0.1')
   .option('-u, --user     <username>', 'username at MAH: [ ab1234 ]')
   .option('-p, --pass     <password>', 'password at MAH')
@@ -24,7 +21,7 @@ commander
   .option('-d, --date     <date>', 'what date to book: [ 16-01-31 ]')
   .option('-t, --time     <time>', 'what time to book. Valid values: [ 08 ], [ 10 ], [ 13 ], [ 15 ], [ 17 ]');
 
-commander.on('--help', function() {
+args.on('--help', function() {
   console.log('  Examples:');
   console.log('');
   console.log('    $ book -u ab1234 -p myPassword -r NI:C0405 -d 15-09-19 -t 13');
@@ -33,50 +30,53 @@ commander.on('--help', function() {
   console.log('');
 });
 
-commander.parse(process.argv);
+args.parse(process.argv);
 
-if (!validators.user(commander.user) ||
-  !validators.pass(commander.pass) ||
-  !validators.room(commander.room) ||
-  !validators.date(commander.date) ||
-  !validators.time(commander.time)
+
+// Validates command line arguments
+if (!validators.user(args.user) ||
+  !validators.pass(args.pass) ||
+  !validators.room(args.room) ||
+  !validators.date(args.date) ||
+  !validators.time(args.time)
 ) {
   process.exit(1);
 }
 
-// book();
+// Books a room
+book(createBookingUrl(), args.pass, args.user);
 
+function createBookingUrl() {
+  var bookingUrl = 'https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&typ=RESURSER_LOKALER&flik=FLIK-0017&moment= ';
+  bookingUrl += '&datum=' + args.date;
+  bookingUrl += '&id=' + constants.ROOMS[args.room].urlRoom;
+  bookingUrl += '&intervall=' + constants.TIMES[args.time].urlTime;
 
-console.log('User: ', commander.user);
-console.log('Pass: ', commander.pass);
-console.log('Room: ', commander.room);
-console.log('Date: ', commander.date);
-console.log('Time: ', commander.time);
+  console.log(bookingUrl);
 
-console.log('https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&datum=' + commander.date + '&id=' + commander.room + '&typ=RESURSER_LOKALER&intervall=' + commander.time + '&moment=&flik=FLIK-0017');
-console.log('https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&datum=' + commander.date + '&id=' + constants.ROOMS[commander.room].urlRoom + '&typ=RESURSER_LOKALER&intervall=' + constants.TIMES[commander.time].urlTime + '&moment= &flik=FLIK-0017');
-// console.log(commander.user);
+  return bookingUrl;
+}
 
-function book() {
+function book(bookingUrl, password, username) {
   request('https://schema.mah.se/resursbokning.jsp?flik=FLIK-0017', function(err, httpResponse1, body) {
     request({
       method: 'POST',
       url: 'https://schema.mah.se/login_do.jsp',
       form: {
-        password: commander.pass,
-        username: commander.user
+        password: password,
+        username: username
       }
     }, function(err, httpResponse2, body) {
       if (!err) {
         request({
-          url: 'https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&datum=' + commander.date + '&id=' + constants.ROOMS[commander.room] + '&typ=RESURSER_LOKALER&intervall=' + constants.TIMES[commander.time] + '&moment= &flik=FLIK-0017',
+          url: bookingUrl,
         }, function(err, httpResponse3, body) {
           if (!err) {
             if (body != 'OK') {
-              console.log('The room was not booked, the following error was received from schema.mah.se: ');
-              console.log(body);
+              console.log('\nThe room was not booked, the following error was received from schema.mah.se: ');
+              console.log('\n\t' + body + '\n');
             } else {
-              console.log('Room ' + commander.room + ' was booked at ' + commander.date + ' ' + commander.timeText);
+              console.log('Room ' + args.room + ' was booked at ' + args.date + ' ' + constants.TIMES[args.time].readableTime);
             }
           } else {
             console.log('GET for https://schema.mah.se/ajax/ajax_resursbokning.jsp?.. failed: ', err);
