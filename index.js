@@ -5,42 +5,16 @@ TODO: README
 TODO: testning
 */
 
-
 var request = require('request');
 var fs = require('fs');
 var http = require('http');
 var commander = require('commander');
+var constants = require('./constants');
 
 // Saves cookies for each request and uses them for the next
 var request = request.defaults({
   jar: true
 });
-
-var TIMES = ['08', '10', '13', '15', '17'];
-var ROOMS = [
-  'NI:A0301',
-  'NI:A0302',
-  'NI:A0303',
-  'NI:A0309',
-  'NI:A0401',
-  'NI:A0402',
-  'NI:A0403',
-  'NI:A0409',
-  'NI:A0506',
-  'NI:A0605',
-  'NI:B0201',
-  'NI:B0301',
-  'NI:B0302',
-  'NI:B0306',
-  'NI:C0201',
-  'NI:C0301',
-  'NI:C0302',
-  'NI:C0303',
-  'NI:C0304',
-  'NI:C0305',
-  'NI:C0308',
-  'NI:C0401'
-];
 
 commander
   .version('0.0.1')
@@ -61,84 +35,17 @@ commander.on('--help', function() {
 
 commander.parse(process.argv);
 
-validateUserAndPass(commander.user, commander.pass);
-validateAndFixRoom(commander.room);
-validateDate(commander.date);
-validateAndFixTime(commander.time);
-
-book();
-
-function validateUserAndPass(user, pass) {
-  var valid = true;
-
-  if (user === undefined)  {
-    console.log('Username must be specified.');
-    valid = false;
-  }
-  if (pass === undefined) {
-    console.log('Password must be specified');
-    valid = false;
-  }
-
-  if (!valid) {
-    process.exit(1);
-  }
+if (!validators.user(commander.user) ||
+  !validators.pass(commander.pass) ||
+  !validators.room(commander.room) ||
+  !validators.date(commander.date) ||
+  !validators.time(commander.time)
+) {
+  process.exit(1);
 }
 
-function validateAndFixRoom()  {
-  var valid = false;
+// book();
 
-  if (commander.room === undefined) {
-    console.log("No room was specified");
-    process.exit(1);
-  } else {
-    var exist = false;
-    for (var i = 0; i < ROOMS.length; i++) {
-      if (ROOMS[i] === commander.room) {
-        commander.room = commander.room.replace(':', '%3A');
-        exist = true;
-      }
-    }
-
-    if (!exist) {
-      console.log('"' + commander.room + '" is not a valid room');
-      process.exit(1);
-    }
-  }
-}
-
-function validateAndFixTime() {
-  var valid = false;
-
-  if (commander.time === undefined) {
-    console.log("No time was specified");
-    process.exit(1);
-  } else {
-    var exist = false;
-    for (var i = 0; i < TIMES.length; i++) {
-      if (TIMES[i] === commander.time) {
-        commander.timeText = commander.time;
-        commander.time = i;
-        exist = true;
-      }
-    }
-
-    if (!exist) {
-      console.log('"' + commander.time + '" is not a valid time');
-      process.exit(1);
-    }
-  }
-}
-
-function validateDate(date) {
-  if (date === undefined) {
-    console.log("No date was specified");
-    process.exit(1);
-  } else if (!date.match(/\b(\d{2})-(\d{2})-(\d{2})\b/))  {
-    console.log('"' + date + '" is not a valid date. Has to be in this format: YY-MM-DD');
-    process.exit(1);
-  }
-}
 
 console.log('User: ', commander.user);
 console.log('Pass: ', commander.pass);
@@ -147,6 +54,7 @@ console.log('Date: ', commander.date);
 console.log('Time: ', commander.time);
 
 console.log('https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&datum=' + commander.date + '&id=' + commander.room + '&typ=RESURSER_LOKALER&intervall=' + commander.time + '&moment=&flik=FLIK-0017');
+console.log('https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&datum=' + commander.date + '&id=' + constants.ROOMS[commander.room].urlRoom + '&typ=RESURSER_LOKALER&intervall=' + constants.TIMES[commander.time].urlTime + '&moment= &flik=FLIK-0017');
 // console.log(commander.user);
 
 function book() {
@@ -161,7 +69,7 @@ function book() {
     }, function(err, httpResponse2, body) {
       if (!err) {
         request({
-          url: 'https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&datum=' + commander.date + '&id=' + commander.room + '&typ=RESURSER_LOKALER&intervall=' + commander.time + '&moment= &flik=FLIK-0017',
+          url: 'https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&datum=' + commander.date + '&id=' + constants.ROOMS[commander.room] + '&typ=RESURSER_LOKALER&intervall=' + constants.TIMES[commander.time] + '&moment= &flik=FLIK-0017',
         }, function(err, httpResponse3, body) {
           if (!err) {
             if (body != 'OK') {
