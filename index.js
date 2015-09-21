@@ -12,41 +12,35 @@ var request = request.defaults({
 
 // Command line arguments and help text
 args
-  .version('0.0.1')
-  .option('-u, --user     <username>', 'username at MAH: [ ab1234 ]')
+  .version('0.1.0')
+  .option('-u, --user     <username>', 'username at MAH')
   .option('-p, --pass     <password>', 'password at MAH')
-  .option('-r, --room     <room number>', 'which room number to book: [ NI:A0301 ]')
-  .option('-d, --date     <date>', 'what date to book: [ 16-01-31 ]')
+  .option('-r, --room     <room number>', 'which room number to book, example: [ NI:A0301 ]')
+  .option('-d, --date     <date>', 'what date to book, example: [ 16-01-31 ]')
   .option('-t, --time     <time>', 'what time to book. Valid values: [ 08 ], [ 10 ], [ 13 ], [ 15 ], [ 17 ]');
 
 args.on('--help', function() {
   console.log('  Examples:');
   console.log('');
   console.log('    $ mah-book-room -u ab1234 -p myPassword -r NI:C0405 -d 15-09-19 -t 13');
-  // console.log('');
   console.log('    .. will book room NI:C0405 on September the 19th between 13.15-15.00');
   console.log('');
 });
 
 args.parse(process.argv);
 
-// Prints help if no arguments was used
+// Prints the help and exits the program if no arguments was used
 if (!process.argv.slice(2).length) {
   args.outputHelp();
   process.exit(1);
 }
 
-// Validates command line arguments
-if (!validators.user(args.user) ||
-  !validators.pass(args.pass) ||
-  !validators.room(args.room) ||
-  !validators.date(args.date) ||
-  !validators.time(args.time)
-) {
+// Validate the command line arguments
+if (!validateArguments()) {
   process.exit(1);
 }
 
-// Books a room
+// Book the room
 bookRoom(createBookingUrl(), args.pass, args.user);
 
 function bookRoom(bookingUrl, password, username) {
@@ -88,4 +82,40 @@ function createBookingUrl() {
   bookingUrl += '&intervall=' + constants.TIMES[args.time].urlTime;
 
   return bookingUrl;
+}
+
+/**
+  Runs validators for all required arguments and prints errors if there are any
+**/
+function validateArguments() {
+  var allPassed = true;
+
+  var userResult = validators.user(args.user);
+  var passResult = validators.pass(args.pass);
+  var roomResult = validators.room(args.room);
+  var dateResult = validators.date(args.date);
+  var timeResult = validators.time(args.time);
+
+  if (userResult instanceof Error) {
+    console.log(userResult.toString());
+    allPassed = false;
+  }
+  if (passResult instanceof Error) {
+    console.log(passResult.toString());
+    allPassed = false;
+  }
+  if (roomResult instanceof Error) {
+    console.log(roomResult.toString());
+    allPassed = false;
+  }
+  if (dateResult instanceof Error) {
+    console.log(dateResult.toString());
+    allPassed = false;
+  }
+  if (timeResult instanceof Error) {
+    console.log(timeResult.toString());
+    allPassed = false;
+  }
+
+  return allPassed;
 }
