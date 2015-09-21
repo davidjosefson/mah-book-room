@@ -1,6 +1,6 @@
 {
   "name": "mah-book-room",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Book rooms via schema.mah.se",
   "scripts": {
     "test": "mocha --recursive test/"
@@ -8,9 +8,9 @@
   "author": "David Josefson",
   "license": "MIT",
   "dependencies": {
-    "chai": "^3.2.0",
-    "commander": "^2.8.1",
-    "request": "^2.61.0"
+    "chai": "~3.2.0",
+    "commander": "~2.8.1",
+    "request": "~2.61.0"
   },
   "preferGlobal": true,
   "bin": {

@@ -12,7 +12,7 @@ var request = request.defaults({
 
 // Command line arguments and help text
 args
-  .version('0.1.0')
+  .version('0.1.1')
   .option('-u, --user     <username>', 'username at MAH')
   .option('-p, --pass     <password>', 'password at MAH')
   .option('-r, --room     <room number>', 'which room number to book, example: [ NI:A0301 ]')
