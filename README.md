@@ -40,7 +40,7 @@ For a complete list of rooms, please visit https://schema.mah.se/resursbokning.j
 #### -h, --help
 Prints the help text for the program.
 
-#### -v, --version
+#### -V, --version
 Prints the version of the program
 
 ## Examples
