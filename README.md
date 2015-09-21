@@ -4,7 +4,7 @@ A simple CLI-tool to let you book group rooms at the building Niagara on Malmö 
 
 ## Installation
 ```
-$ npm install -g mah-book-room
+$ npm install --global mah-book-room
 ```
 
 ## Usage
@@ -40,7 +40,7 @@ For a complete list of rooms, please visit https://schema.mah.se/resursbokning.j
 #### -h, --help
 Prints the help text for the program.
 
-#### -v, --version
+#### -V, --version
 Prints the version of the program
 
 ## Examples
