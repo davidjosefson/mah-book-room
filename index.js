@@ -4,6 +4,7 @@ var request = require('request');
 var args = require('commander');
 var constants = require('./constants');
 var validators = require('./validators');
+var helpers = require('./helpers');
 
 // Saves response cookies for each request and uses them for the next one
 var request = request.defaults({
@@ -16,7 +17,7 @@ args
   .option('-u, --user     <username>', 'username at MAH')
   .option('-p, --pass     <password>', 'password at MAH')
   .option('-r, --room     <room number>', 'which room number to book, example: [ NI:A0301 ]')
-  .option('-d, --date     <date>', 'what date to book, example: [ 16-01-31 ]')
+  .option('-d, --date     <date>', 'what date to book, example: [ 16-01-31 ], [ today ] or [ tomorrow ]')
   .option('-t, --time     <time>', 'what time to book. Valid values: [ 08 ], [ 10 ], [ 13 ], [ 15 ], [ 17 ]');
 
 args.on('--help', function() {
@@ -39,6 +40,9 @@ if (!process.argv.slice(2).length) {
 if (!validateArguments()) {
   process.exit(1);
 }
+
+// Create valid date-string [YY-MM-DD] if 'today' or 'tomorrow' is used
+args.date = helpers.createDateString(args.date);
 
 // Book the room
 bookRoom(createBookingUrl(), args.pass, args.user);

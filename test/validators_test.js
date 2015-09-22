@@ -94,8 +94,20 @@ describe('Testing the validators', function()  {
     it('should return false if input is an int', function()  {
       expect(validators.date(151224)).to.be.an.instanceof(Error);
     });
-    it('should return true if input correctly formatted', function()  {
+    it('should return false if input is "tomorrowandtoday"', function()  {
+      expect(validators.date("tomorrowandtoday")).to.be.an.instanceof(Error);
+    });
+    it('should return false if input is an int', function()  {
+      expect(validators.date(151224)).to.be.an.instanceof(Error);
+    });
+    it('should return true if input correctly formatted, as YY-MM-DD', function()  {
       expect(validators.date("16-05-26")).to.equal(true);
+    });
+    it('should return true if input correctly formatted, as "today"', function()  {
+      expect(validators.date("today")).to.equal(true);
+    });
+    it('should return true if input correctly formatted, as "tomorrow"', function()  {
+      expect(validators.date("tomorrow")).to.equal(true);
     });
   });
 });
