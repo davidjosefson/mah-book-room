@@ -33,4 +33,10 @@ describe('Testing the helpers-file', function()  { 
       expect(helpers.createDateString('today')).not.to.equal(helpers.createDateString('tomorrow'));
     });
   });
+
+  describe('Testing the createBookingUrl()-function', function() {
+    it('should return a correct url to use for booking if all parameters are correct', function() {
+      expect(helpers.createBookingUrl('15-10-31', '08', 'NI:A0506')).to.equal('https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&typ=RESURSER_LOKALER&flik=FLIK-0017&moment= &datum=15-10-31&id=NI%3AA0506&intervall=0');
+    });
+  });
 });
