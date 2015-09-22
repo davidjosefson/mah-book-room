@@ -41,11 +41,11 @@ if (!validateArguments()) {
   process.exit(1);
 }
 
-// Create valid date-string [YY-MM-DD] if 'today' or 'tomorrow' is used
-args.date = helpers.createDateString(args.date);
+// Create booking url
+var bookingUrl = helpers.createBookingUrl(args.date, args.time, args.room);
 
 // Book the room
-bookRoom(createBookingUrl(), args.pass, args.user);
+bookRoom(bookingUrl, args.pass, args.user);
 
 function bookRoom(bookingUrl, password, username) {
   request('https://schema.mah.se/resursbokning.jsp?flik=FLIK-0017', function(err, httpResponse1, body) {
@@ -77,15 +77,6 @@ function bookRoom(bookingUrl, password, username) {
       }
     });
   });
-}
-
-function createBookingUrl() {
-  var bookingUrl = 'https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&typ=RESURSER_LOKALER&flik=FLIK-0017&moment= ';
-  bookingUrl += '&datum=' + args.date;
-  bookingUrl += '&id=' + constants.ROOMS[args.room].urlRoom;
-  bookingUrl += '&intervall=' + constants.TIMES[args.time].urlTime;
-
-  return bookingUrl;
 }
 
 /**
