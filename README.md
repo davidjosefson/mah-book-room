@@ -19,9 +19,7 @@ Username for Kronox and all other MAH web services.
 Password for Kronox and all other MAH web services.
 
 #### -d, --date
-Must be formatted like this: `15-10-31`
-
-.. or more formally: as **[YY-MM-DD]**.
+Must be the words `today`, `tomorrow` or a date formatted like this: `15-10-31` ( YY-MM-DD ).
 
 #### -t, --time
 Must be one of the following valid values:
@@ -45,9 +43,9 @@ Prints the version of the program
 
 ## Examples
 ```
-$ mah-book-room -u ab1234 -p myPassword -r NI:C0405 -d 15-09-19 -t 13
+$ mah-book-room -u ab1234 -p myPassword -r NI:C0405 -d tomorrow -t 13
 ```
-.. will book room **NI:C0405** on **September the 19th 2015** between **13:15-15:00**.
+.. will book room **NI:C0405** for **tomorrow** between **13:15-15:00**.
 
 ```
 $ mah-book-room -u ab1234 -p myPassword -r NI:A0309 -d 16-01-01 -t 08
@@ -69,24 +67,4 @@ $ Din användare har inte rättigheter att skapa resursbokningar.
 
 
 ## License
-The MIT License (MIT)
-
-Copyright (c) 2015 David Josefson
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+MIT
