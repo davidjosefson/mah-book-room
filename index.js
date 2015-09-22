@@ -13,7 +13,7 @@ var request = request.defaults({
 
 // Command line arguments and help text
 args
-  .version('0.1.1')
+  .version('0.2.0')
   .option('-u, --user     <username>', 'username at MAH')
   .option('-p, --pass     <password>', 'password at MAH')
   .option('-r, --room     <room number>', 'which room number to book, example: [ NI:A0301 ]')
@@ -23,8 +23,8 @@ args
 args.on('--help', function() {
   console.log('  Examples:');
   console.log('');
-  console.log('    $ mah-book-room -u ab1234 -p myPassword -r NI:C0405 -d 15-09-19 -t 13');
-  console.log('    .. will book room NI:C0405 on September the 19th between 13.15-15.00');
+  console.log('    $ mah-book-room -u ab1234 -p myPassword -d tomorrow -t 13 -r NI:C0405');
+  console.log('    .. will book room NI:C0405 for tomorrow between 13.15-15.00');
   console.log('');
 });
 

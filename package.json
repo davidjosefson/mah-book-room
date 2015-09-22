@@ -1,6 +1,6 @@
 {
   "name": "mah-book-room",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Book rooms via schema.mah.se",
   "scripts": {
     "test": "mocha --recursive test/"
