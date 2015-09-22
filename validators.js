@@ -37,10 +37,10 @@ validators.time = function(time) {
 
 validators.date = function(date) {
   if (date === null || date === undefined) {
-    return new Error('No date was specified. \t\tExample use: [ -d 15-09-27 ]');
+    return new Error('No date was specified. \t\tExample use: [ -d 15-09-27 ], [ -d today ] or [ -d tomorrow ]');
   } else if (typeof date != 'string') {
     return new Error('Date was not a string');
-  } else if (!date.match(/\b(\d{2})-(\d{2})-(\d{2})\b/))  {
+  } else if (!date.match(/\b(\d{2})-(\d{2})-(\d{2})\b|\btoday\b|\btomorrow\b/))  {
     return new Error('"' + date + '" is not a valid date. Has to be in this format: YY-MM-DD');
   }
   return true;

@@ -4,6 +4,7 @@ var request = require('request');
 var args = require('commander');
 var constants = require('./constants');
 var validators = require('./validators');
+var helpers = require('./helpers');
 
 // Saves response cookies for each request and uses them for the next one
 var request = request.defaults({
@@ -12,18 +13,18 @@ var request = request.defaults({
 
 // Command line arguments and help text
 args
-  .version('0.1.1')
+  .version('0.2.0')
   .option('-u, --user     <username>', 'username at MAH')
   .option('-p, --pass     <password>', 'password at MAH')
   .option('-r, --room     <room number>', 'which room number to book, example: [ NI:A0301 ]')
-  .option('-d, --date     <date>', 'what date to book, example: [ 16-01-31 ]')
+  .option('-d, --date     <date>', 'what date to book, example: [ 16-01-31 ], [ today ] or [ tomorrow ]')
   .option('-t, --time     <time>', 'what time to book. Valid values: [ 08 ], [ 10 ], [ 13 ], [ 15 ], [ 17 ]');
 
 args.on('--help', function() {
   console.log('  Examples:');
   console.log('');
-  console.log('    $ mah-book-room -u ab1234 -p myPassword -r NI:C0405 -d 15-09-19 -t 13');
-  console.log('    .. will book room NI:C0405 on September the 19th between 13.15-15.00');
+  console.log('    $ mah-book-room -u ab1234 -p myPassword -d tomorrow -t 13 -r NI:C0405');
+  console.log('    .. will book room NI:C0405 for tomorrow between 13.15-15.00');
   console.log('');
 });
 
@@ -40,8 +41,11 @@ if (!validateArguments()) {
   process.exit(1);
 }
 
+// Create booking url
+var bookingUrl = helpers.createBookingUrl(args.date, args.time, args.room);
+
 // Book the room
-bookRoom(createBookingUrl(), args.pass, args.user);
+bookRoom(bookingUrl, args.pass, args.user);
 
 function bookRoom(bookingUrl, password, username) {
   request('https://schema.mah.se/resursbokning.jsp?flik=FLIK-0017', function(err, httpResponse1, body) {
@@ -73,15 +77,6 @@ function bookRoom(bookingUrl, password, username) {
       }
     });
   });
-}
-
-function createBookingUrl() {
-  var bookingUrl = 'https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&typ=RESURSER_LOKALER&flik=FLIK-0017&moment= ';
-  bookingUrl += '&datum=' + args.date;
-  bookingUrl += '&id=' + constants.ROOMS[args.room].urlRoom;
-  bookingUrl += '&intervall=' + constants.TIMES[args.time].urlTime;
-
-  return bookingUrl;
 }
 
 /**
