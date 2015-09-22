@@ -1,4 +1,5 @@
 # mah-book-room
+[![npm version](https://badge.fury.io/js/mah-book-room.svg)](http://badge.fury.io/js/mah-book-room)
 
 A simple CLI-tool to let you book group rooms at the building Niagara on Malmö Högskola.
 
