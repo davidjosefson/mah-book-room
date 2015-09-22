@@ -1,3 +1,5 @@
+var constants = require('./constants');
+
 var helpers = {};
 
 helpers.createDateString = function(dateAsWord)  {
@@ -16,6 +18,19 @@ helpers.createDateString = function(dateAsWord)  {
   }
 
   return dateAsWord;
+}
+
+helpers.createBookingUrl = function(date, time, room) {
+  var formattedDate = helpers.createDateString(date);
+  var formattedTime = constants.TIMES[time].urlTime;
+  var formattedRoom = constants.ROOMS[room].urlRoom;
+
+  var bookingUrl = 'https://schema.mah.se/ajax/ajax_resursbokning.jsp?op=boka&typ=RESURSER_LOKALER&flik=FLIK-0017&moment= ';
+  bookingUrl += '&datum=' + formattedDate;
+  bookingUrl += '&id=' + formattedRoom;
+  bookingUrl += '&intervall=' + formattedTime;
+
+  return bookingUrl;
 }
 
 module.exports = helpers;
