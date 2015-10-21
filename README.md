@@ -1,6 +1,6 @@
 # mah-book-room
 
-A simple CLI-tool to let you book group rooms at the building Niagara on Malmö Högskola.
+A simple CLI-tool to let you book group rooms at the Niagara building on Malmö Högskola.
 
 ## Installation
 ```
